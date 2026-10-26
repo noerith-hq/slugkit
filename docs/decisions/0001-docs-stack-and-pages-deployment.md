@@ -13,6 +13,7 @@ slugkit needs public documentation that is versioned (a `dev` version for `main`
 Build the documentation with Material for MkDocs, mkdocstrings and mike, and publish it with GitHub Pages from the `gh-pages` branch.
 
 - `docs.yml` deploys the `dev` version (alias `latest`) on every push to `main`.
+- The site root redirects to `stable` once a release exists, and to `latest` until then. `docs.yml` sets the default with `mike set-default` after each deployment, and checks that `stable` exists first because `mike set-default` fails for an unknown version.
 - `release.yml` calls `docs.yml` after it publishes a release, which deploys `X.Y.x` with the aliases `stable` and `X.Y.Z`. Pre-releases are published under their own version and do not move `stable`.
 - `docs.yml` is called from `release.yml` because tags and releases created with `GITHUB_TOKEN` do not trigger `on: push: tags` workflows.
 - `python.yml` builds the site with `mkdocs build --strict` on every pull request, so broken links and bad cross-references fail review.

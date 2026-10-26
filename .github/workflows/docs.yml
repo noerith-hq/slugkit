@@ -60,9 +60,16 @@ jobs:
               # Release v1.2.3 -> version "1.2.x" with aliases "stable" and "1.2.3"
               MINOR="$(cut -d. -f1,2 <<<"${RELEASE}")"
               mike deploy --push --alias-type=redirect --update-aliases "${MINOR}.x" stable "${RELEASE}"
+              # From now on the site root opens the stable docs
+              mike set-default --push stable
             fi
           else
             mike deploy --push --alias-type=redirect --title "Development version" --update-aliases dev latest
-            # Make the site root redirect to /latest/
-            mike set-default --push latest
+            # The site root opens the stable docs once a release exists, and the dev docs until then.
+            # "mike set-default" fails for a version that does not exist, so check first.
+            if mike list stable >/dev/null 2>&1; then
+              mike set-default --push stable
+            else
+              mike set-default --push latest
+            fi
           fi
