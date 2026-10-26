@@ -75,7 +75,8 @@ markdown_extensions:
 extra:
   version:
     provider: mike
-    default: latest
+    # Preselected in the version menu; the first alias that exists wins
+    default: [stable, latest]
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/noerith-hq/slugkit

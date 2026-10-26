@@ -16,6 +16,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Changed
 
+- Open the `stable` version of the documentation by default once a release exists.
 - Split release validation from publication so write access is granted only to the publish job.
 - Check both YAML workflow extensions and local composite actions for immutable action references.
 - Present a polished starter README while preserving project-specific initialization.
