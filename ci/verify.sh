@@ -93,7 +93,10 @@ while IFS= read -r workflow_file; do
 
     if [[ "${line}" =~ ^[[:space:]]*([A-Za-z0-9_-]+):[[:space:]]*write([[:space:]#]|$) ]]; then
       permission="${BASH_REMATCH[1]}"
-      if [[ "${workflow_file}" != '.github/workflows/release.yml' || "${permission}" != 'contents' ]]; then
+      # Only release.yml and docs.yml may write repository contents: release.yml publishes the
+      # GitHub release and docs.yml pushes the built site to the gh-pages branch (ADR 0001).
+      if [[ "${permission}" != 'contents' ]] ||
+        [[ "${workflow_file}" != '.github/workflows/release.yml' && "${workflow_file}" != '.github/workflows/docs.yml' ]]; then
         fail "Unexpected write permission in ${workflow_file}: ${permission}"
       fi
     fi
@@ -110,7 +113,10 @@ while IFS= read -r workflow_file; do
 done < <(find "${workflow_roots[@]}" -type f \( -name '*.yml' -o -name '*.yaml' \) -print)
 
 secret_pattern='gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----'
-secret_hits="$(find . -type f ! -path './.git/*' ! -name LICENSE -exec grep -nE "${secret_pattern}" {} + 2>/dev/null || true)"
+# Local virtual environments and build output are not part of the repository.
+scan_excludes=(! -path './.git/*' ! -path './.venv/*' ! -path './venv/*' ! -path './site/*')
+
+secret_hits="$(find . -type f "${scan_excludes[@]}" ! -name LICENSE -exec grep -nE "${secret_pattern}" {} + 2>/dev/null || true)"
 if [[ -n "${secret_hits}" ]]; then
   printf '%s\n' "${secret_hits}" >&2
   fail 'Potential credential material found in the repository'
@@ -120,11 +126,21 @@ placeholder_pattern='\{\{PROJECT_[A-Z_]+\}\}'
 if [[ -f .noerith-template ]]; then
   require_contains 'NOERITH starter template sentinel.' .noerith-template
 else
-  placeholder_hits="$(find . -type f ! -path './.git/*' -exec grep -nE "${placeholder_pattern}" {} + 2>/dev/null || true)"
+  placeholder_hits="$(find . -type f "${scan_excludes[@]}" -exec grep -nE "${placeholder_pattern}" {} + 2>/dev/null || true)"
   if [[ -n "${placeholder_hits}" ]]; then
     printf '%s\n' "${placeholder_hits}" >&2
     fail 'Required project placeholders remain after initialization'
   fi
+fi
+
+# Python stack: lint and test in a throwaway virtual environment kept outside the repository.
+if [[ -f pyproject.toml ]]; then
+  python_env="$(mktemp -d)"
+  trap 'rm -rf -- "${python_env}"' EXIT
+  python3 -m venv "${python_env}"
+  "${python_env}/bin/python" -m pip install --quiet --disable-pip-version-check -e '.[dev]'
+  "${python_env}/bin/ruff" check .
+  "${python_env}/bin/pytest" --quiet
 fi
 
 printf 'NOERITH starter checks passed.\n'

@@ -66,3 +66,13 @@ jobs:
             --target "${GITHUB_SHA}" \
             --title "${VERSION}" \
             --generate-notes
+
+  docs:
+    name: Publish documentation
+    needs: publish
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/docs.yml
+    with:
+      version: ${{ inputs.version }}

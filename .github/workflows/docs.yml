@@ -1,0 +1,68 @@
+name: Docs
+
+on:
+  push:
+    branches: [main]
+  workflow_call:
+    inputs:
+      version:
+        description: Release tag to publish as the stable docs, for example v1.2.3. Leave empty to publish the development docs.
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+# Two runs pushing to gh-pages at the same time would conflict
+concurrency:
+  group: docs-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy documentation
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write # mike pushes the built site to the gh-pages branch (see ADR 0001)
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # mike needs the full git history
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-docs.txt
+
+      - name: Install documentation dependencies
+        run: pip install -r requirements-docs.txt
+
+      - name: Deploy site
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # The first run has no gh-pages branch yet
+          git fetch origin gh-pages --depth=1 || true
+
+          if [[ -n "${VERSION}" ]]; then
+            RELEASE="${VERSION#v}"
+            if [[ "${RELEASE}" == *-* ]]; then
+              # Pre-release such as 1.2.3-rc.1: publish it on its own and leave "stable" alone
+              mike deploy --push --alias-type=redirect "${RELEASE}"
+            else
+              # Release v1.2.3 -> version "1.2.x" with aliases "stable" and "1.2.3"
+              MINOR="$(cut -d. -f1,2 <<<"${RELEASE}")"
+              mike deploy --push --alias-type=redirect --update-aliases "${MINOR}.x" stable "${RELEASE}"
+            fi
+          else
+            mike deploy --push --alias-type=redirect --title "Development version" --update-aliases dev latest
+            # Make the site root redirect to /latest/
+            mike set-default --push latest
+          fi

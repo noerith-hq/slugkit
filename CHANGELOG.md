@@ -9,6 +9,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 ### Added
 
 - Initial project foundation from `noerith-starter`.
+- `slugkit` Python library (`slugify`, `is_slug`) and the `slugkit` command-line tool, with tests.
+- Versioned documentation site (MkDocs Material and mike) published to GitHub Pages.
+- Python test matrix and strict documentation build workflow.
+- Python lint and test checks in `ci/verify.sh`, and `pip` updates in Dependabot.
 
 ### Changed
 
@@ -18,5 +22,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ### Security
 
+- Allow `contents: write` in `docs.yml` in addition to `release.yml`, so the documentation workflow can push the built site to the `gh-pages` branch. See `docs/decisions/0001-docs-stack-and-pages-deployment.md`.
 - Reject broad or unexpected GitHub Actions write permissions.
 - Use the hardened, immutable revision of the NOERITH reusable CI workflow.
