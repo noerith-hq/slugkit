@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 
 ## [Unreleased]
 
+### Added
+
+- NOERITH brand: brand assets in `docs/assets/brand/`, a NOERITH footer in the README, and the NOERITH mark, favicon and footer line on the documentation site.
+
 ### Changed
 
 - Open the `stable` version of the documentation by default once a release exists.

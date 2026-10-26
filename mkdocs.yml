@@ -6,12 +6,24 @@ repo_url: https://github.com/noerith-hq/slugkit
 repo_name: noerith-hq/slugkit
 edit_uri: edit/main/docs/
 
-# Internal template instructions, not part of the public site
+# NOERITH brand on the site: copyright, theme.logo, theme.favicon, extra_css, the assets/brand
+# exclude below, and docs/assets/noerith-mark-small-white.svg. Remove these together with
+# docs/assets/brand/ to drop the brand (see docs/assets/brand/README.md).
+copyright: <a href="https://github.com/noerith-hq" target="_blank" rel="noopener">A NOERITH project</a>
+
+# Internal template instructions and brand notes, not part of the public site
 exclude_docs: |
   PROJECT_SETUP.md
+  assets/brand/README.md
 
 theme:
   name: material
+  # The NOERITH mark in one colour (white on the header), small optical size: extra.css sizes it
+  # to 32 px in the header and 47 px in the mobile drawer, inside the small drawing's 24-47 px range
+  logo: assets/noerith-mark-small-white.svg
+  # Material links one favicon, relative to each page, so it also works under the mike version
+  # folders; the root-level <head> snippet in docs/assets/brand/README.md does not apply here
+  favicon: assets/brand/web/favicon.ico
   features:
     # Behave like an SPA
     - navigation.instant
@@ -71,6 +83,9 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
+
+extra_css:
+  - stylesheets/extra.css
 
 extra:
   version:
