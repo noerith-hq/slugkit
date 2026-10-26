@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://noerith-hq.github.io/slugkit/dev/</loc>
+         <lastmod>2026-10-26</lastmod>
+    </url>
+    <url>
+         <loc>https://noerith-hq.github.io/slugkit/dev/architecture/</loc>
+         <lastmod>2026-10-26</lastmod>
+    </url>
+    <url>
+         <loc>https://noerith-hq.github.io/slugkit/dev/contributing/</loc>
+         <lastmod>2026-10-26</lastmod>
+    </url>
+    <url>
+         <loc>https://noerith-hq.github.io/slugkit/dev/getting-started/</loc>
+         <lastmod>2026-10-26</lastmod>
+    </url>
+    <url>
+         <loc>https://noerith-hq.github.io/slugkit/dev/decisions/</loc>
+         <lastmod>2026-10-26</lastmod>
+    </url>
+    <url>
+         <loc>https://noerith-hq.github.io/slugkit/dev/decisions/0001-docs-stack-and-pages-deployment/</loc>
+         <lastmod>2026-10-26</lastmod>
+    </url>
+    <url>
+         <loc>https://noerith-hq.github.io/slugkit/dev/guide/usage/</loc>
+         <lastmod>2026-10-26</lastmod>
+    </url>
+    <url>
+         <loc>https://noerith-hq.github.io/slugkit/dev/reference/api/</loc>
+         <lastmod>2026-10-26</lastmod>
+    </url>
+</urlset>
