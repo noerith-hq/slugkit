@@ -1,41 +1,67 @@
-# NOERITH Repository Starter
+# slugkit
 
-> Secure, reusable project foundation for NOERITH repositories.
+[![CI](https://github.com/noerith-hq/slugkit/actions/workflows/ci.yml/badge.svg)](https://github.com/noerith-hq/slugkit/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-latest-teal)](https://noerith-hq.github.io/slugkit/)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+
+> Tiny, dependency-free helpers for turning text into URL-friendly slugs.
 
 ## Status
 
-{{PROJECT_STATUS}}
+Sample project
 
 ## Problem
 
-{{PROJECT_PROBLEM}}
+Generating clean, predictable URL slugs from text, including accented and Vietnamese text, usually means pulling in a heavy dependency or maintaining ad-hoc regular expressions.
 
 ## Getting started
 
-This repository was created from the NOERITH starter. Before the first delivery, initialize it with project-specific information:
+slugkit is not published to PyPI yet. Install it straight from GitHub (Python 3.10 or newer):
 
 ```bash
-./scripts/initialize.sh \
-  --name "My Project" \
-  --description "One-sentence product description" \
-  --problem "The user problem this project addresses"
+pip install "git+https://github.com/noerith-hq/slugkit.git"
 ```
 
-The initializer replaces the required project placeholders and removes the template sentinel. Do not add credentials, API keys, customer data, or production configuration to this repository.
+```python
+from slugkit import slugify
+
+slugify("Xin chào, Việt Nam!")               # 'xin-chao-viet-nam'
+slugify("Hello World", separator="_")        # 'hello_world'
+slugify("A very long article title", max_length=12)  # 'a-very-long'
+```
+
+Or from the command line:
+
+```console
+$ slugkit "Hello, World!"
+hello-world
+```
+
+Full documentation lives at **<https://noerith-hq.github.io/slugkit/>**. Do not add credentials, API keys, customer data, or production configuration to this repository.
 
 ## Local development
 
-This starter is technology-neutral. Select the application stack in the first architecture decision, then document the local setup and run commands here.
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]" -r requirements-docs.txt
+mkdocs serve   # live preview of the documentation at http://127.0.0.1:8000
+```
 
 ## Testing
 
-Run the baseline contract locally:
+Run the repository contract locally. It also runs the linter and the test suite:
 
 ```bash
 ./ci/verify.sh
 ```
 
-Add stack-specific lint, build, and test commands as the project takes shape.
+During development you can run the pieces directly:
+
+```bash
+ruff check .
+pytest
+mkdocs build --strict
+```
 
 ## Architecture
 
@@ -47,7 +73,7 @@ Report vulnerabilities through the organization [security policy](https://github
 
 ## Contributing
 
-Follow the NOERITH [contribution guide](https://github.com/noerith-hq/.github/blob/main/CONTRIBUTING.md), [code of conduct](https://github.com/noerith-hq/.github/blob/main/CODE_OF_CONDUCT.md), and [support policy](https://github.com/noerith-hq/.github/blob/main/SUPPORT.md).
+Follow the NOERITH [contribution guide](https://github.com/noerith-hq/.github/blob/main/CONTRIBUTING.md), [code of conduct](https://github.com/noerith-hq/.github/blob/main/CODE_OF_CONDUCT.md), and [support policy](https://github.com/noerith-hq/.github/blob/main/SUPPORT.md). Project-specific setup is in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Development conventions
 
@@ -59,8 +85,6 @@ Follow the NOERITH [contribution guide](https://github.com/noerith-hq/.github/bl
 - Use pull requests for normal changes; review major dependency updates manually.
 - Owner bypass is reserved for an emergency only.
 
-> GitHub Free note: organization rulesets can be configured but may not be enforced for private repositories. Follow this pull-request convention even where GitHub cannot enforce it.
-
 ## License
 
-This starter is licensed under the [Apache License 2.0](LICENSE). Confirm the appropriate license before applying it to a product repository.
+Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for attribution.
