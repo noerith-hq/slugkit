@@ -857,6 +857,7 @@
 <p>Build the documentation with Material for MkDocs, mkdocstrings and mike, and publish it with GitHub Pages from the <code>gh-pages</code> branch.</p>
 <ul>
 <li><code>docs.yml</code> deploys the <code>dev</code> version (alias <code>latest</code>) on every push to <code>main</code>.</li>
+<li>The site root redirects to <code>stable</code> once a release exists, and to <code>latest</code> until then. <code>docs.yml</code> sets the default with <code>mike set-default</code> after each deployment, and checks that <code>stable</code> exists first because <code>mike set-default</code> fails for an unknown version.</li>
 <li><code>release.yml</code> calls <code>docs.yml</code> after it publishes a release, which deploys <code>X.Y.x</code> with the aliases <code>stable</code> and <code>X.Y.Z</code>. Pre-releases are published under their own version and do not move <code>stable</code>.</li>
 <li><code>docs.yml</code> is called from <code>release.yml</code> because tags and releases created with <code>GITHUB_TOKEN</code> do not trigger <code>on: push: tags</code> workflows.</li>
 <li><code>python.yml</code> builds the site with <code>mkdocs build --strict</code> on every pull request, so broken links and bad cross-references fail review.</li>
@@ -946,7 +947,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": ["stable", "latest"], "provider": "mike"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
