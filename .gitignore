@@ -25,3 +25,11 @@ __pycache__/
 .pytest_cache/
 .venv/
 venv/
+
+# Python and MkDocs output
+*.py[cod]
+*.egg-info/
+.ruff_cache/
+.coverage
+htmlcov/
+site/
